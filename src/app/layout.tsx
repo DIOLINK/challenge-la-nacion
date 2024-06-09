@@ -1,3 +1,4 @@
+import { ArticlesContextProvider } from '@/context/ArticlesContext'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -18,7 +19,9 @@ export default function RootLayout({
           href="https://especiales.lanacion.com.ar/arc-css/css/site.css"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <ArticlesContextProvider>{children}</ArticlesContextProvider>
+      </body>
     </html>
   )
 }
