@@ -14,10 +14,6 @@ beforeAll(() => {
 afterAll(() => {
   global.fetch = unlockedFetch
 })
-it('should render home page', () => {
-  render(<HomePage />)
-  expect(screen.getByText('Acumulado Grilla')).toBeInTheDocument()
-})
 
 const MOCK_ARTICLES = {
   articles: [
@@ -33,6 +29,18 @@ const MOCK_ARTICLES = {
     },
   ],
 }
+it('should render home page', async () => {
+  jest.spyOn(global, 'fetch').mockResolvedValue({
+    ok: true,
+    json: async () => MOCK_ARTICLES,
+  } as Response)
+
+  const { data, tags } = await dataArticles()
+  render(<HomePage articles={data} tags={tags} />)
+  expect(screen.getByText('Acumulado Grilla')).toBeInTheDocument()
+  expect(data[0].subtype).toBe('7')
+  expect(tags[0].text).toBe('Tag1')
+})
 
 it('should return articles filtered by default subtype "7"', async () => {
   jest.spyOn(global, 'fetch').mockResolvedValue({
@@ -44,7 +52,10 @@ it('should return articles filtered by default subtype "7"', async () => {
 
   expect(data).toHaveLength(1)
   expect(data[0].subtype).toBe('7')
-  expect(tags).toEqual(['Tag1'])
+  expect(tags[0]).toEqual({
+    text: expect.any(String),
+    count: expect.any(Number),
+  })
 })
 it('should return the correct format of the article dates', async () => {
   jest.spyOn(global, 'fetch').mockResolvedValue({
@@ -61,4 +72,19 @@ it('should return the correct format of the article dates', async () => {
       year: 'numeric',
     })
   )
+})
+it('should return the correct format tag', async () => {
+  jest.spyOn(global, 'fetch').mockResolvedValue({
+    ok: true,
+    json: async () => MOCK_ARTICLES,
+  } as Response)
+
+  const { tags } = await dataArticles()
+
+  expect(tags[0]).toEqual({
+    text: expect.any(String),
+    count: expect.any(Number),
+  })
+  expect(tags[0].count).toBe(1)
+  expect(tags[0].text).toBe('Tag1')
 })
