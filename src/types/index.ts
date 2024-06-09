@@ -4,7 +4,7 @@ export interface Articles {
 
 export interface Article {
   _id: string
-  display_date: Date
+  display_date: Date | string
   headlines: Headlines
   promo_items?: PromoItems
   subtype: string

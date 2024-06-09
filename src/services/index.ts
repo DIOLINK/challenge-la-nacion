@@ -1,6 +1,6 @@
-import { Articles } from '@/type'
+import { Articles, SetTag } from '@/types'
 const API_URL = process.env.API_URL
-async function getArticles(): Promise<Articles> {
+export async function getArticles(): Promise<Articles> {
   const res = await fetch(API_URL as string)
   if (!res.ok) {
     throw new Error('Failed to fetch Articles')
@@ -20,15 +20,23 @@ export async function dataArticles(filter: string = '7') {
       year: 'numeric',
     }),
   }))
-  const setTags = new Set<string>()
-  resData.forEach((article) =>
-    article.taxonomy.tags.forEach((tag) => setTags.add(tag.text.toLowerCase()))
-  )
+
+  const tags = resData.reduce<Record<string, SetTag>>((reArticle, article) => {
+    article.taxonomy.tags.forEach((tag) => {
+      if (!reArticle[tag.slug]) {
+        reArticle[tag.slug] = {
+          ...tag,
+          count: 1,
+        }
+      } else {
+        reArticle[tag.slug].count++
+      }
+    })
+    return reArticle
+  }, {})
 
   return {
     data: resData,
-    tags: Array.from(setTags)
-      .map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1))
-      .sort(),
+    tags: Object.values(tags).sort((a, b) => b.count - a.count),
   }
 }
