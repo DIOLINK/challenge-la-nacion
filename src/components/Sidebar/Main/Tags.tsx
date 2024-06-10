@@ -7,7 +7,7 @@ export const Tags = () => {
   return (
     <div className="row">
       <div className="cont_tags com-secondary-tag hlp-marginBottom-20">
-        {tags.map((tag, index) => (
+        {tags.map((tag) => (
           <Link
             key={tag.slug}
             href={createThemePath(tag.slug)}

@@ -1,12 +1,14 @@
-import { Article, SetTag } from '@/types'
-import { createContext } from 'react'
+import { ArticlesContext } from '@/context/ArticlesContext'
+import { render } from '@testing-library/react'
 
-interface ArticlesContextProps {
-  articles: Article[]
-  tags: SetTag[]
+export const customRender = (
+  children: React.ReactNode,
+  { providerProps, ...renderOptions }: any
+) => {
+  return render(
+    <ArticlesContext.Provider {...providerProps}>
+      {children}
+    </ArticlesContext.Provider>,
+    renderOptions
+  )
 }
-
-export const mockContext = createContext<ArticlesContextProps>({
-  articles: [],
-  tags: [],
-})

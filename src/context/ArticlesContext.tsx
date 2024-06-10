@@ -16,7 +16,7 @@ interface ArticlesContextProps {
   setTags: Dispatch<SetStateAction<SetTag[]>>
 }
 
-const ArticlesContext = createContext<ArticlesContextProps>({
+export const ArticlesContext = createContext<ArticlesContextProps>({
   articles: [],
   tags: [],
   setArticles: () => {},
