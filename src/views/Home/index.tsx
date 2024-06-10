@@ -1,5 +1,19 @@
+'use client'
 import { Sidebar } from '@/components'
-export const HomePage = () => {
+import { useArticles } from '@/context/ArticlesContext'
+import { Article, SetTag } from '@/types'
+import { useEffect } from 'react'
+interface HomePageProps {
+  articles: Article[]
+  tags: SetTag[]
+}
+export const HomePage = ({ articles, tags }: HomePageProps) => {
+  const { setArticles, setTags } = useArticles()
+  useEffect(() => {
+    setArticles(articles)
+    setTags(tags)
+  }, [articles, tags])
+
   return (
     <main>
       <div className="lay-sidebar">
