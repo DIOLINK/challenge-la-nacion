@@ -12,7 +12,7 @@ export const HomePage = ({ articles, tags }: HomePageProps) => {
   useEffect(() => {
     setArticles(articles)
     setTags(tags)
-  }, [articles, tags])
+  }, [articles, setArticles, setTags, tags])
 
   return (
     <main>
